@@ -1,0 +1,10 @@
+# credentials
+creds.json
+
+# misc
+__pycache__/
+.ipynb_checkpoints/
+.vscode/
+
+# nbs 
+reed.ipynb
