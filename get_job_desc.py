@@ -1,5 +1,5 @@
 import json
-from HTMLParser import MyHTMLParser
+from util.HTMLParser import MyHTMLParser
 
 import click
 

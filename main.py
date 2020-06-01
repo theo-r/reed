@@ -1,5 +1,5 @@
 from ReedClient import ReedClient
-from DataProcessor import DataProcessor
+from util.DataProcessor import DataProcessor
 import click
 import urllib
 import json
