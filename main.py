@@ -1,8 +1,12 @@
+import urllib
+import os
+
+import click
+
 from ReedClient import ReedClient
 from util.DataProcessor import DataProcessor
-import click
-import urllib
-import json
+
+env_vars = os.environ.copy()
 
 
 @click.command()
@@ -11,10 +15,7 @@ import json
 @click.option('--since', default=7, help='How many days back to search')
 @click.option('--location', default=None, help='Where to perform job search')
 def main(query, num_jobs, since, location):
-    with open('creds.json', 'r') as f:
-        creds = json.load(f)
-
-    API_KEY = creds['API_KEY']
+    API_KEY = env_vars['API_KEY']
 
     client = ReedClient(api_key=API_KEY)
     processor = DataProcessor()
