@@ -10,11 +10,12 @@ env_vars = os.environ.copy()
 
 
 @click.command()
-@click.option('--query', default=None, help='Job search query')
+@click.option('--query', required=True, type=str, help='Job search query')
 @click.option('--num_jobs', default=10, help='Number of jobs to show')
 @click.option('--since', default=7, help='How many days back to search')
-@click.option('--location', default=None, help='Where to perform job search')
-def main(query, num_jobs, since, location):
+@click.option('--location', default=None, type=str,
+              help='Where to perform job search')
+def main(query, num_jobs, since, location) -> None:
     API_KEY = env_vars['API_KEY']
 
     client = ReedClient(api_key=API_KEY)
