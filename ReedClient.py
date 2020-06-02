@@ -17,14 +17,29 @@ class ReedClient:
         r = requests.get(url, auth=auth, params=args)
         jobs = r.json()['results']
         total_results = r.json()['totalResults']
-        jobs_to_skip = 100
 
-        while jobs_to_skip < total_results:
+        if 'resultsToTake' in args.keys():
+
+            if args['resultsToTake'] <= 100:
+                return jobs
+
+            else:
+                results_to_take = args['resultsToTake']
+
+        else:
+            results_to_take = total_results
+
+        jobs_to_skip = 100
+        remaining_jobs = results_to_take - jobs_to_skip
+
+        while len(jobs) < results_to_take:
             args['resultsToSkip'] = jobs_to_skip
+            args['resultsToTake'] = remaining_jobs
             r = requests.get(url, auth=auth, params=args)
             new_jobs = r.json()['results']
             jobs.extend(new_jobs)
             jobs_to_skip += 100
+            remaining_jobs = results_to_take - jobs_to_skip
 
         return jobs
 
