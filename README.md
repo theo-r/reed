@@ -1,9 +1,16 @@
 # Python wrapper for the Reed API
 
+A simple way to search for jobs using the Reed API in python.
+
+This project was (heavily) inspired by the similar work on the Indeed API 
+which can be found [here]('https://github.com/indeedlabs/indeed-python').
+Getting a publisher number from Indeed was a pain so I looked for similar
+API's and stumbled upon Reed.
+
 ## API Credentials
 
-The API needs to be called with a reed.co.uk API Key. This key needs to be passed
-into the ReedClient constructor.
+To be able to interact with the Reed API you will need an API Key. This
+key is passed into the reed client's constructor.
 
 ```python
 from ReedClient import ReedClient
@@ -11,14 +18,30 @@ from ReedClient import ReedClient
 client = ReedClient(api_key=YOUR_API_KEY)
 ```
 
-You can sign up for an API key [here](https://www.reed.co.uk/developers/jobseeker)
+You can sign up for an API key [here](https://www.reed.co.uk/developers/jobseeker).
+
+## Performing a Job Search
+
+```python
+from ReedClient import ReedClient
+
+client = ReedClient('API_KEY')
+
+params = {
+    'keywords' : "data scientist",
+    'locationName' : "London",
+    'minimumSalary': 30000
+}
+
+response = client.search(**params)
+```
 
 ## API Parameters
 
 ### Job Search
 
 **keywords** - 
-Query. By default terms are ANDed.
+This is the parameter for your search query. By default terms are ANDed.
 
 **employerId** - 
 id of employer posting job
