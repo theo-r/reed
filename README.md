@@ -3,7 +3,7 @@
 A simple way to search for jobs using the Reed API in python.
 
 This project was (heavily) inspired by the similar work on the Indeed API 
-which can be found [here]('https://github.com/indeedlabs/indeed-python').
+which can be found [here](https://github.com/indeedlabs/indeed-python).
 Getting a publisher number from Indeed was a pain so I looked for similar
 API's and stumbled upon Reed.
 
