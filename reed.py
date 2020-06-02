@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import urllib
 import os
 
@@ -5,17 +7,23 @@ import click
 
 from ReedClient import ReedClient
 from util.DataProcessor import DataProcessor
+from util.HTMLParser import MyHTMLParser
 
 env_vars = os.environ.copy()
 
 
-@click.command()
+@click.group()
+def cli():
+    pass
+
+
+@cli.command('job_search')
 @click.option('--query', required=True, type=str, help='Job search query')
 @click.option('--num_jobs', default=10, help='Number of jobs to show')
 @click.option('--since', default=7, help='How many days back to search')
 @click.option('--location', default=None, type=str,
               help='Where to perform job search')
-def main(query, num_jobs, since, location) -> None:
+def job_search(query, num_jobs, since, location):
     API_KEY = env_vars['API_KEY']
 
     client = ReedClient(api_key=API_KEY)
@@ -54,5 +62,21 @@ def main(query, num_jobs, since, location) -> None:
         print()
 
 
+@cli.command('job_desc')
+@click.option('--job_id',
+              required=True,
+              type=int,
+              help='Reed job id')
+def job_desc(job_id):
+    """Simple program that displays job descriptions."""
+    API_KEY = env_vars['API_KEY']
+    client = ReedClient(API_KEY)
+    result = client.job_details(job_id=job_id)
+    job_desc_html, job_url = result['jobDescription'], result['jobUrl']
+    parser = MyHTMLParser()
+    print(job_url)
+    parser.feed(job_desc_html)
+
+
 if __name__ == '__main__':
-    main()
+    cli()

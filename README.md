@@ -36,6 +36,19 @@ params = {
 response = client.search(**params)
 ```
 
+## Retrieving job details
+
+```python
+from ReedClient import ReedClient
+
+client = ReedClient('API_KEY')
+
+result = client.job_details(job_id=job_id)
+
+response = client.search(**params)
+```
+
+
 ## API Parameters
 
 ### Job Search
@@ -48,9 +61,6 @@ id of employer posting job
 
 **employerProfileId** -	
 profile id of employer posting job
-
-**keywords** - 
-any search keywords
 
 **locationName** -	
 the location of the job
