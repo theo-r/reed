@@ -1,11 +1,24 @@
 # Python wrapper for the Reed API
 
-## API Paramaters
+## API Credentials
+
+The API needs to be called with a reed.co.uk API Key. This key needs to be passed
+into the ReedClient constructor.
+
+```python
+from ReedClient import ReedClient
+
+client = ReedClient(api_key=YOUR_API_KEY)
+```
+
+You can sign up for an API key [here](https://www.reed.co.uk/developers/jobseeker)
+
+## API Parameters
 
 ### Job Search
 
-**q** - 
-Query. By default terms are ANDed. To see what is possible, use our [advanced search](http://www.indeed.com/advanced_search) page to perform a search and then check the url for the q value.
+**keywords** - 
+Query. By default terms are ANDed.
 
 **employerId** - 
 id of employer posting job
