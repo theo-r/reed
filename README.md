@@ -44,8 +44,6 @@ from ReedClient import ReedClient
 client = ReedClient('API_KEY')
 
 result = client.job_details(job_id=job_id)
-
-response = client.search(**params)
 ```
 
 
