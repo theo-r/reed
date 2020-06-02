@@ -6,7 +6,7 @@ JOB_DETAILS_ROOT = 'https://www.reed.co.uk/api/1.0/jobs/'
 
 
 class ReedClient:
-    def __init__(self, api_key):
+    def __init__(self, api_key: str) -> None:
         self.api_key = api_key
 
     def search(self, **args):

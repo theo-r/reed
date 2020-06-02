@@ -25,7 +25,7 @@ You can sign up for an API key [here](https://www.reed.co.uk/developers/jobseeke
 ```python
 from ReedClient import ReedClient
 
-client = ReedClient('API_KEY')
+client = ReedClient(api_key)
 
 params = {
     'keywords' : "data scientist",
@@ -41,7 +41,7 @@ response = client.search(**params)
 ```python
 from ReedClient import ReedClient
 
-client = ReedClient('API_KEY')
+client = ReedClient(api_key)
 
 result = client.job_details(job_id=job_id)
 ```

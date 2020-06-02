@@ -8,3 +8,7 @@ __pycache__/
 
 # nbs 
 reed.ipynb
+
+# package management
+Pipfile
+Pipfile.lock
