@@ -1,4 +1,4 @@
-# Python wrapper for the Reed API
+# reed
 
 A simple way to search for jobs using the Reed API in python.
 

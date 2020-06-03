@@ -12,3 +12,7 @@ reed.ipynb
 # package management
 Pipfile
 Pipfile.lock
+
+reed.egg-info/
+
+tests/.pytest_cache
