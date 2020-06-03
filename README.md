@@ -54,6 +54,9 @@ result = client.job_details(job_id=job_id)
 **keywords** - 
 This is the parameter for your search query. By default terms are ANDed.
 
+**resultsToTake** -	
+maximum number of results to return (the default is 100)
+
 **employerId** - 
 id of employer posting job
 
@@ -95,9 +98,3 @@ true/false
 
 **graduate** -	
 true/false
-
-**resultsToTake** -	
-maximum number of results to return (defaults and is limited to 100 results)
-
-**resultsToSkip** -	
-number of results to skip (this can be used with resultsToTake for paging)
