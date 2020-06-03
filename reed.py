@@ -5,7 +5,7 @@ import os
 
 import click
 
-from ReedClient import ReedClient
+from reed import ReedClient
 from util.DataProcessor import DataProcessor
 from util.HTMLParser import MyHTMLParser
 

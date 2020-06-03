@@ -27,12 +27,12 @@ class ReedClient:
                 results_to_take = args['resultsToTake']
 
         else:
-            results_to_take = total_results
+            return jobs
 
         jobs_to_skip = 100
         remaining_jobs = results_to_take - jobs_to_skip
 
-        while len(jobs) < results_to_take:
+        while (len(jobs) < results_to_take) and (len(jobs) < total_results):
             args['resultsToSkip'] = jobs_to_skip
             args['resultsToTake'] = remaining_jobs
             r = requests.get(url, auth=auth, params=args)

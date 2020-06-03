@@ -1,26 +1,25 @@
 import os
-from nose.tools import with_setup
 
-import reed
+import pytest
 
-
-api_key = os.environ.get('API_KEY')
+from reed import ReedClient
 
 
-def setup():
-    client = ReedClient(api_key=api_key)
+@pytest.fixture
+def setup_client():
+    api_key = os.environ.get('API_KEY')
+    client = ReedClient(api_key)
+    return client
+
+
+@pytest.fixture
+def setup_params():
     params = {
-        'keywords': 'data scientist',
-        'locationName': 'London',
-        'minimumSalary': 30000
+        'keywords': 'data scientist'
     }
+    return params
 
 
-def teardown():
-    client = None
-    params = None
-
-@with_setup(setup, teardown)
-def test_search():
-    response = client.search(**params)
-    assert type(search_response) is dict
+def test_search(setup_client, setup_params):
+    response = setup_client.search(**setup_params)
+    assert type(response) is list
