@@ -13,7 +13,7 @@ class ReedClient:
         '''
         Perform a job search with given arguments.
         '''
-        return self.process__search_request(ROOT_URL, args)
+        return self.process_search_request(ROOT_URL, args)
 
     def process_search_request(self, url: str, args) -> list:
         '''
