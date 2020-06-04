@@ -9,10 +9,10 @@ class ReedClient:
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
 
-    def search(self, **args):
+    def search(self, **args) -> list:
         return self.process_request(ROOT_URL, args)
 
-    def process_request(self, url, args):
+    def process_request(self, url: str, args) -> list:
         auth = HTTPBasicAuth(username=self.api_key, password='')
         r = requests.get(url, auth=auth, params=args)
         jobs = r.json()['results']
@@ -43,11 +43,15 @@ class ReedClient:
 
         return jobs
 
-    def job_details(self, job_id):
+    def job_details(self, job_id: int) -> dict:
+
+        if not type(job_id) is int:
+            raise ValueError("'job_id' must be type 'int'")
+
         url = JOB_DETAILS_ROOT + str(job_id)
         return self.process_job_details_request(url)
 
-    def process_job_details_request(self, url):
+    def process_job_details_request(self, url: str) -> dict:
         auth = HTTPBasicAuth(username=self.api_key, password='')
         r = requests.get(url, auth=auth)
         return r.json()
