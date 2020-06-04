@@ -16,3 +16,6 @@ Pipfile.lock
 reed.egg-info/
 
 tests/.pytest_cache
+LICENSE
+.pytest_cache
+conftest.py
