@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="reed",
-    version="0.0.1",
+    version="0.0.2",
     author="Theo Rutter",
     author_email="theo.rutter@gmail.com",
     description="Search for jobs using the Reed API in python.",
