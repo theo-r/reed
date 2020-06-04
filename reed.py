@@ -24,7 +24,11 @@ def cli():
 @click.option('--location', default=None, type=str,
               help='Where to perform job search')
 def job_search(query, num_jobs, since, location):
-    API_KEY = env_vars['API_KEY']
+    try:
+        API_KEY = os.environ['API_KEY']
+    except KeyError:
+        print("'API_KEY' not found in environment variables.")
+        return
 
     client = ReedClient(api_key=API_KEY)
     processor = DataProcessor()

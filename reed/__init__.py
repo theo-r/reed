@@ -10,9 +10,15 @@ class ReedClient:
         self.api_key = api_key
 
     def search(self, **args) -> list:
-        return self.process_request(ROOT_URL, args)
+        '''
+        Perform a job search with given arguments.
+        '''
+        return self.process__search_request(ROOT_URL, args)
 
-    def process_request(self, url: str, args) -> list:
+    def process_search_request(self, url: str, args) -> list:
+        '''
+        Process job search request using requests library.
+        '''
         auth = HTTPBasicAuth(username=self.api_key, password='')
         r = requests.get(url, auth=auth, params=args)
         jobs = r.json()['results']
@@ -27,6 +33,7 @@ class ReedClient:
                 results_to_take = args['resultsToTake']
 
         else:
+            # return 100 jobs by default
             return jobs
 
         jobs_to_skip = 100
@@ -36,14 +43,16 @@ class ReedClient:
             args['resultsToSkip'] = jobs_to_skip
             args['resultsToTake'] = remaining_jobs
             r = requests.get(url, auth=auth, params=args)
-            new_jobs = r.json()['results']
-            jobs.extend(new_jobs)
+            jobs.extendr(r.json()['results'])
             jobs_to_skip += 100
             remaining_jobs = results_to_take - jobs_to_skip
 
         return jobs
 
     def job_details(self, job_id: int) -> dict:
+        '''
+        Retrieve details of the job with given id.
+        '''
 
         if not type(job_id) is int:
             raise ValueError("'job_id' must be type 'int'")
@@ -52,6 +61,9 @@ class ReedClient:
         return self.process_job_details_request(url)
 
     def process_job_details_request(self, url: str) -> dict:
+        '''
+        Process a job details request using requests library.
+        '''
         auth = HTTPBasicAuth(username=self.api_key, password='')
         r = requests.get(url, auth=auth)
         return r.json()
