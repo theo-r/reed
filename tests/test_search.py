@@ -6,14 +6,14 @@ from reed import ReedClient
 
 
 @pytest.fixture
-def setup_client():
+def client():
     api_key = os.environ.get('API_KEY')
     client = ReedClient(api_key)
     return client
 
 
 @pytest.fixture
-def setup_params():
+def params():
     params = {
         'keywords': 'data scientist'
     }
@@ -21,38 +21,38 @@ def setup_params():
 
 
 @pytest.fixture
-def setup_job_id():
+def job_id_int():
     job_id = 1
     return job_id
 
 
 @pytest.fixture
-def setup_job_id_str():
+def job_id_str():
     job_id = 's'
     return job_id
 
 
-def test_search(setup_client, setup_params):
-    response = setup_client.search(**setup_params)
+def test_search(client, params):
+    response = client.search(**params)
     assert type(response) is list
 
 
-def test_search_missing_key(setup_client, setup_params):
-    del setup_client.api_key
+def test_search_missing_key(client, params):
+    del client.api_key
     with pytest.raises(AttributeError):
-        setup_client.search(**setup_params)
+        client.search(**params)
 
 
-def test_job_details(setup_client, setup_job_id):
-    response = setup_client.job_details(job_id=setup_job_id)
+def test_job_details(client, job_id_int):
+    response = client.job_details(job_id=job_id_int)
     assert type(response) is dict
 
 
-def test_missing_job_id(setup_client):
+def test_missing_job_id(client):
     with pytest.raises(TypeError):
-        setup_client.job_details()
+        client.job_details()
 
 
-def test_job_details_wrong_type(setup_client, setup_job_id_str):
+def test_job_details_wrong_type(client, job_id_str):
     with pytest.raises(ValueError):
-        setup_client.job_details(setup_job_id_str)
+        client.job_details(job_id_str)
