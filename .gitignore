@@ -19,3 +19,6 @@ tests/.pytest_cache
 LICENSE
 .pytest_cache
 conftest.py
+
+build/
+dist/

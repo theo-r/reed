@@ -13,7 +13,7 @@ To be able to interact with the Reed API you will need an API Key. This
 key is passed into the reed client's constructor.
 
 ```python
-from ReedClient import ReedClient
+from reed import ReedClient
 
 client = ReedClient(api_key=YOUR_API_KEY)
 ```
@@ -23,7 +23,7 @@ You can sign up for an API key [here](https://www.reed.co.uk/developers/jobseeke
 ## Performing a Job Search
 
 ```python
-from ReedClient import ReedClient
+from reed import ReedClient
 
 client = ReedClient(api_key)
 
