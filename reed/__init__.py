@@ -43,7 +43,7 @@ class ReedClient:
             args['resultsToSkip'] = jobs_to_skip
             args['resultsToTake'] = remaining_jobs
             r = requests.get(url, auth=auth, params=args)
-            jobs.extendr(r.json()['results'])
+            jobs.extend(r.json()['results'])
             jobs_to_skip += 100
             remaining_jobs = results_to_take - jobs_to_skip
 
