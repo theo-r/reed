@@ -23,7 +23,7 @@ class ReedClient:
         r = requests.get(url, auth=auth, params=args)
 
         if not r:
-            raise AttributeError('Something aint right here')
+            r.raise_for_status()
         
         jobs = r.json()['results']
         total_results = r.json()['totalResults']
@@ -72,6 +72,6 @@ class ReedClient:
         r = requests.get(url, auth=auth)
 
         if not r:
-            raise AttributeError('Something done gone wrong.')
-        
+            r.raise_for_status()
+
         return r.json()
