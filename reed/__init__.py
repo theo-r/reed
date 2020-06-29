@@ -21,6 +21,10 @@ class ReedClient:
         '''
         auth = HTTPBasicAuth(username=self.api_key, password='')
         r = requests.get(url, auth=auth, params=args)
+
+        if not r:
+            raise AttributeError('Something aint right here')
+        
         jobs = r.json()['results']
         total_results = r.json()['totalResults']
 
@@ -66,4 +70,8 @@ class ReedClient:
         '''
         auth = HTTPBasicAuth(username=self.api_key, password='')
         r = requests.get(url, auth=auth)
+
+        if not r:
+            raise AttributeError('Something done gone wrong.')
+        
         return r.json()
