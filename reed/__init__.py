@@ -24,7 +24,7 @@ class ReedClient:
 
         if not r:
             r.raise_for_status()
-        
+
         jobs = r.json()['results']
         total_results = r.json()['totalResults']
 
