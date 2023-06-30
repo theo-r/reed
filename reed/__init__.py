@@ -63,8 +63,7 @@ class ReedClient(Session):
             return jobs
         remaining_jobs = kwargs["resultsToTake"] - OFFSET
         while remaining_jobs > 0:
-            kwargs.update({
-                "resultsToSkip": OFFSET, "resultsToTake": remaining_jobs})
+            kwargs.update({"resultsToSkip": OFFSET, "resultsToTake": OFFSET})
             jobs.extend(self.get(ROOT_URL, **kwargs).json()["results"])
             remaining_jobs -= OFFSET
         return jobs
