@@ -22,13 +22,15 @@ class ReedClient(Session):
         delay = kwargs.pop("delay", 3)
         attemps = 0
         response = super().get(url, **kwargs)
-        while response.status_code == 429 or attemps < MAX_ATTEMPTS:
+        while response.status_code == 429:
             delay = response.headers.get("Retry-After", delay)
             sleep(min(0, (self.last_call + delay) - time()))
             response = super().get(url, **kwargs)
             self.last_call = time()
             delay += 1
             attemps += 1
+            if attemps > MAX_ATTEMPTS:
+            	break
         if not response.ok:
             response.raise_for_status()
         self.last_call = time() + response.headers.get("Retry-After", 0)
