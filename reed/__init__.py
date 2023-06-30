@@ -1,77 +1,54 @@
-import requests
+""" Reed API """
+from time import time, sleep
+from requests import Session
 from requests.auth import HTTPBasicAuth
 
-ROOT_URL = 'https://www.reed.co.uk/api/1.0/search?'
-JOB_DETAILS_ROOT = 'https://www.reed.co.uk/api/1.0/jobs/'
+ROOT_URL = "https://www.reed.co.uk/api/1.0/search?"
+JOB_DETAILS_ROOT = "https://www.reed.co.uk/api/1.0/jobs/"
+MAX_ATTEMPTS = 3
+OFFSET = 100
 
 
-class ReedClient:
+class ReedClient(Session):
+    """ ReedClient which inherits the requests.Session object """
     def __init__(self, api_key: str) -> None:
-        self.api_key = api_key
+        self.auth = HTTPBasicAuth(username=api_key, password='')
+        self.last_call = time()
+        super().__init__()
 
-    def search(self, **args) -> list:
-        '''
-        Perform a job search with given arguments.
-        '''
-        return self.process_search_request(ROOT_URL, args)
+    def get(self, url, **kwargs):
+        """ GET request with response raising for status when not ok """
+        kwargs.setdefault("auth", self.auth)
+        delay = kwargs.pop("delay", 3)
+        attemps = 0
+        response = super().get(url, **kwargs)
+        while response.status_code == 429 or attemps < MAX_ATTEMPTS:
+            delay = response.headers.get("Retry-After", delay)
+            sleep(min(0, (self.last_call + delay) - time()))
+            response = super().get(url, **kwargs)
+            self.last_call = time()
+            delay += 1
+            attemps += 1
+        if not response.ok:
+            response.raise_for_status()
+        self.last_call = time() + response.headers.get("Retry-After", 0)
+        return response
 
-    def process_search_request(self, url: str, args) -> list:
-        '''
-        Process job search request using requests library.
-        '''
-        auth = HTTPBasicAuth(username=self.api_key, password='')
-        r = requests.get(url, auth=auth, params=args)
-
-        if not r:
-            r.raise_for_status()
-
-        jobs = r.json()['results']
-        total_results = r.json()['totalResults']
-
-        if 'resultsToTake' in args.keys():
-
-            if args['resultsToTake'] <= 100:
-                return jobs
-
-            else:
-                results_to_take = args['resultsToTake']
-
-        else:
-            # return 100 jobs by default
+    def search(self, **kwargs) -> list:
+        """ Perform a job search with given key word arguments. """
+        jobs = self.get(ROOT_URL, **kwargs).json()["results"]
+        if kwargs.get("resultsToTake", OFFSET) <= OFFSET:
             return jobs
-
-        jobs_to_skip = 100
-        remaining_jobs = results_to_take - jobs_to_skip
-
-        while (len(jobs) < results_to_take) and (len(jobs) < total_results):
-            args['resultsToSkip'] = jobs_to_skip
-            args['resultsToTake'] = remaining_jobs
-            r = requests.get(url, auth=auth, params=args)
-            jobs.extend(r.json()['results'])
-            jobs_to_skip += 100
-            remaining_jobs = results_to_take - jobs_to_skip
-
+        remaining_jobs = kwargs["resultsToTake"] - OFFSET
+        while remaining_jobs > 0:
+            kwargs.update({
+                "resultsToSkip": OFFSET, "resultsToTake": remaining_jobs})
+            jobs.extend(self.get(ROOT_URL, **kwargs).json()["results"])
+            remaining_jobs -= OFFSET
         return jobs
 
     def job_details(self, job_id: int) -> dict:
-        '''
-        Retrieve details of the job with given id.
-        '''
-
-        if not type(job_id) is int:
-            raise ValueError("'job_id' must be type 'int'")
-
-        url = JOB_DETAILS_ROOT + str(job_id)
-        return self.process_job_details_request(url)
-
-    def process_job_details_request(self, url: str) -> dict:
-        '''
-        Process a job details request using requests library.
-        '''
-        auth = HTTPBasicAuth(username=self.api_key, password='')
-        r = requests.get(url, auth=auth)
-
-        if not r:
-            r.raise_for_status()
-
-        return r.json()
+        """ Retrieve details of the job with given id. """
+        if not isinstance(job_id, int):
+            raise ValueError("{job_id!r} must be type {int!r}")
+        return self.get(JOB_DETAILS_ROOT + str(job_id)).json()
