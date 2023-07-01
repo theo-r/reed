@@ -1,72 +1,73 @@
-import os
+""" Reed Test Module """
+
+from os import environ
 from requests import HTTPError
-
-import pytest
-
+from pytest import fixture, raises
 from reed import ReedClient
 
 
-@pytest.fixture
+@fixture
 def client():
-    api_key = os.environ.get('API_KEY')
-    client = ReedClient(api_key)
-    return client
+    """ reed client fixture """
+    return ReedClient(environ.get("REED_API_KEY"))
 
 
-@pytest.fixture
+@fixture
 def params():
-    params = {
-        'keywords': 'data scientist'
-    }
-    return params
+    """ query string parameter fixture """
+    return {'keywords': 'data scientist'}
 
 
-@pytest.fixture
+@fixture
 def job_id_int():
-    job_id = 1
-    return job_id
+    """ integer job id fixture """
+    return 1
 
-@pytest.fixture
+
+@fixture
 def job_id_str():
-    job_id = 's'
-    return job_id
+    """ string of job id fixture """
+    return 's'
 
 
 def test_search(client, params):
-    response = client.search(**params)
-    assert type(response) is list
+    """ Assert test on search returning `list` """
+    assert isinstance(client.search(**params), list)
 
 
 def test_search_missing_key(client, params):
+    """ Test of missing api key on search raising `AttributeError` """
     del client.api_key
-    with pytest.raises(AttributeError):
+    with raises(AttributeError):
         client.search(**params)
 
 
 def test_search_wrong_key(client, params):
+    """ Test of wrong key on search raising `HTTPError`"""
     client.api_key = 'a'
-    with pytest.raises(HTTPError):
+    with raises(HTTPError):
         client.search(**params)
 
 
 def test_job_details(client, job_id_int):
-    response = client.job_details(job_id=job_id_int)
-    assert type(response) is dict
+    """ Assert test on job_details returns a `dict`"""
+    assert isinstance(client.job_details(job_id=job_id_int), dict)
 
 
 def test_missing_job_id(client):
-    with pytest.raises(TypeError):
+    """ Test of missing job id raising `TypeError`"""
+    with raises(TypeError):
         client.job_details()
 
 
 def test_job_details_wrong_type(client, job_id_str):
-    with pytest.raises(ValueError):
+    """ Test of wrong type for job_details raising `ValueError`"""
+    with raises(ValueError):
         client.job_details(job_id_str)
 
 
 def test_job_details_missing_key(client, job_id_int):
+    """ Test of missing api key on job details raising `AttributeError`"""
     del client.api_key
-    with pytest.raises(AttributeError):
+    with raises(AttributeError):
         client.job_details(job_id=job_id_int)
-
-
